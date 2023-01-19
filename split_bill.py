@@ -1,8 +1,4 @@
-def add_amount_to_persons(amount_dict, ids, amount_to_add):
-    # function to split an amount with persons, id is the list of ids of the corresponding persons
-    per_head = amount_to_add / len(ids)
-    for id in ids:
-        amount_dict[id] += per_head
+from utils import add_amount_to_persons
 
 
 def app():
@@ -33,43 +29,48 @@ def app():
     for i, participant_data in participant_dict.items():
         print(f"{participant_data} - {i}")
 
-    # add bill
-    total = int(input('\nEnter total bill: '))
+    num_of_bills = int(input('Enter Total Number of Bills to Split: '))
 
-    # separate bills
-    amount = ''
+    for bill in range(num_of_bills):
 
-    # splittable amount
-    splitted_amount = 0
+        print('\nAdding Bill No:', bill + 1)
+        # add bill
+        total = int(input('Enter total bill: '))
 
-    print('\nAdding splittable bills, Enter amount as 0 to stop\n')
-    while True:
-        amount = int(input('Enter splittable bill: '))
-        splitted_amount += amount
+        # separate bills
+        amount = ''
 
-        if amount == 0:
-            break
+        # splittable amount
+        splitted_amount = 0
 
-        # input persons to split the amount
-        ids = input("Enter ids of persons in scope separated by ',' : ")
-        ids = ids.split(',')
+        print('\nAdding splittable bills, Enter amount as 0 to stop\n')
+        while True:
+            amount = int(input('Enter splittable bill: '))
+            splitted_amount += amount
 
-        # converts it to int
-        ids = [int(id.strip()) for id in ids]
+            if amount == 0:
+                break
 
-        add_amount_to_persons(amount_dict, ids, amount)
+            # input persons to split the amount
+            ids = input("Enter ids of persons in scope separated by ',' : ")
+            ids = ids.split(',')
 
-        # show remaining amount
-        print('Remaining bill: ', total - splitted_amount)
+            # converts it to int
+            ids = [int(id.strip()) for id in ids]
 
-    # add common amount (amount remaining after splittable amounts)
-    add_amount_to_persons(amount_dict, participant_ids, total - splitted_amount)
+            add_amount_to_persons(amount_dict, ids, amount)
+
+            # show remaining amount
+            print('Remaining bill: ', total - splitted_amount)
+
+        # add common amount (amount remaining after splittable amounts)
+        add_amount_to_persons(amount_dict, participant_ids, total - splitted_amount)
 
     print('\nSummary\n-------')
     print('Name\tAmount\n------------')
 
     for key, amount in amount_dict.items():
-        print(f"{participant_dict[key]} : \t{amount}")
+        print(f"{participant_dict[key]} : \t{round(amount)}")
 
 
 if __name__ == '__main__':
